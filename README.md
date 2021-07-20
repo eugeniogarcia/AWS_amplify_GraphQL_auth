@@ -340,3 +340,22 @@ Todos ellos se caracterizan por:
       console.log({ err })
     }
 ```
+
+## Autenticación
+
+Vamos a utilizar rutas:
+
+```ps
+npm install react-router-dom @types/react-router-dom
+```
+
+Añadimos el backend de autenticación
+
+```ps
+amplify add auth
+```
+
+```ps
+amplify push
+```
+

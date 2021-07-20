@@ -1,5 +1,6 @@
-import React, { useEffect, useReducer } from 'react'
-import './App.css';
+import React, { useEffect, useReducer, FunctionComponent } from 'react'
+import { RouteComponentProps } from 'react-router-dom';
+import './Monedas.css';
 
 import API, { graphqlOperation } from '@aws-amplify/api'
 import { listNotes } from './graphql/queries'
@@ -10,6 +11,8 @@ import { Input, List, Button } from 'antd'
 import 'antd/dist/antd.css'
 import { uuid } from 'uuidv4';
 import CSS from 'csstype';
+
+import { Auth } from 'aws-amplify'
 
 //En styles definimos varios elementos, todos ellos contendran uno o varios estilos, por eso los definimos como CSS.Properties
 const styles = {
@@ -82,10 +85,19 @@ let reducer: React.Reducer<estado, accion> =
     }
   }
 
+type TParams = {};
 
-function App() {
+const Monedas: FunctionComponent<RouteComponentProps<TParams>> = function (props: RouteComponentProps<TParams>) {
   //Usamos useReducer como hook
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  //Protege el acceso
+  useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .catch(() => {
+        props.history.push('/profile')
+      })
+  }, [])
 
   //Una vez se ha creado el virtual DOM
   useEffect(() => {
@@ -214,4 +226,4 @@ function App() {
   );
 }
 
-export default App;
+export default Monedas;
