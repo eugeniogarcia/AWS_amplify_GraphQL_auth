@@ -11,13 +11,15 @@ import 'antd/dist/antd.css'
 import { uuid } from 'uuidv4';
 import CSS from 'csstype';
 
+//En styles definimos varios elementos, todos ellos contendran uno o varios estilos, por eso los definimos como CSS.Properties
 const styles = {
-  container: { padding: '20' } as CSS.Properties,
+  container: { padding: '20', margin: '0' } as CSS.Properties,
   input: { marginBottom: '10' } as CSS.Properties,
   item: { textAlign: 'left' } as CSS.Properties,
   p: { color: '#1890ff' } as CSS.Properties
 }
 
+//Tipos
 type nota = {
   id?: string 
   clientId: string
@@ -51,6 +53,7 @@ type accion=
     notes: nota[],
   } 
   
+//Estado inicial
 const initialState: estado = {
   notes: [],
   loading: true,
@@ -60,6 +63,7 @@ const initialState: estado = {
 
 const CLIENT_ID = uuid()
 
+//Definimos el reducer como una función del tipo React.Reducer<estado, accion> 
 let reducer: React.Reducer<estado, accion> =
   (state, action) => {
     switch (action.type) {
@@ -80,8 +84,10 @@ let reducer: React.Reducer<estado, accion> =
 
 
 function App() {
+  //Usamos useReducer como hook
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  //Una vez se ha creado el virtual DOM
   useEffect(() => {
     fetchNotes()
     const subscription = API.graphql(graphqlOperation(onCreateNote))
@@ -92,9 +98,13 @@ function App() {
     return () => subscription.unsubscribe()
   }, [])
 
+  //Que hacer cuando se haya creado una nota
   function update_notes(x:any){
     const note = x.value.data.onCreateNote
+    if(note===null)return
+    console.log(note)
     if (CLIENT_ID === note.clientId) return
+    //Actualizar el estado cuando la nueva nota, no la hayamos creado nosotros
     dispatch({ type: 'ADD_NOTE', note })
   }
 
@@ -123,6 +133,7 @@ function App() {
     dispatch({ type: 'ADD_NOTE', note })
     dispatch({ type: 'RESET_FORM' })
     try {
+      //Invoca a una mutación
       await API.graphql(graphqlOperation(CreateNote, { input: note }))
       console.log('se ha creado la nota!')
     } catch (err) {
