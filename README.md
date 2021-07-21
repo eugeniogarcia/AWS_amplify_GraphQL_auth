@@ -341,13 +341,79 @@ Todos ellos se caracterizan por:
     }
 ```
 
-## Autenticación
+## Rutas
 
-Vamos a utilizar rutas:
+Vamos a utilizar rutas para demostrar como proteger ciertos componentes - rutas:
 
 ```ps
 npm install react-router-dom @types/react-router-dom
 ```
+
+En `Router.tsx` definimos un router de tipo _HashRouter_:
+
+```js
+<HashRouter>
+    <Nav current={current} />
+    <Switch>
+        <Route exact path="/" component={Public} />
+        <Route exact path="/protected" component={Protected} />
+        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/monedas" component={Monedas} />
+        <Route component={Public} />
+    </Switch>
+</HashRouter>
+```
+
+El componente incluye el componente _Nav_ al que se le pasa una propiedad _current_, y un _Switch_ en el que se gestionan cinco rutas.
+
+La propiedad _current_ es el estado y guarda el nombre de la ruta activa:
+
+```js
+const [current, setCurrent] = useState('home')
+```
+
+```js
+function setRoute() {
+    const location = window.location.href.split('/')
+    const pathname = location[location.length - 1]
+    setCurrent(pathname ? pathname : 'home')
+}
+```
+
+Este método se invoca cada vez que se cambia la ruta. Para ello la primera vez que se renderiza la app - _useEffect(() => {},[])_ -, nos subscribimos al evento _hashchange_. Cando el componente se termina, eliminamos la subscripción:
+
+```js
+useEffect(() => {
+    setRoute()
+    window.addEventListener('hashchange', setRoute)
+    return () => window.removeEventListener('hashchange', setRoute)
+}, [])
+```
+
+### Nav
+
+En el componente Nav incluimos un menú desde el que podemos acceder a todas las rutas. Como estamos usando typescript, el componente esta tipado. Se tipa con el generic _FunctionComponent<T>_ donde _T_ es el tipo de las props que se pasan al componente, que también estan tipadas:
+
+```js
+type propiedades={
+    current: string
+}
+
+const Nav: FunctionComponent<propiedades> = (props: propiedades) => {
+```
+
+El menú tiene se pinta en horizontal -_mode="horizontal"_- y tiene una serie de items identificados con su _key_ -_<Menu.Item key='home'>_-. Cada item es un link a un componente  -_<Link to={`/`}>_-. Por último, podemos especificar un icono con cada item del menú - por ejemplo, _<HomeOutlined />_:
+
+```js
+<Menu selectedKeys={[current]} mode="horizontal">
+    <Menu.Item key='home'>
+        <Link to={`/`}>
+            <HomeOutlined />Home
+        </Link>
+    </Menu.Item>
+```
+
+## Autenticación
 
 Añadimos el backend de autenticación
 
@@ -359,3 +425,36 @@ amplify add auth
 amplify push
 ```
 
+Tenemos dos herramientas a nuestra disposición:
+- Clase _Auth_
+- Componentes React - también hay React-Native, Angular y VUE
+
+En el componente _Protected.tsx_ demostramos como usar la clase _Auth_. Una vez el virtual DOM se ha creado:
+
+```js
+useEffect(() => {
+    Auth.currentAuthenticatedUser()
+        .catch(() => {
+            props.history.push('/profile')
+        })
+    }, [])
+```
+
+Estamos accediendo al usuario que está autenticado. Sino hubiera ningun usuario autenticado, se lanza una excepción, que procesamos para forzar la navegación a la ruta _/profile_. Notese también que al definir el componente lo hemos tipificado indicando que tiene una propiedad _RouteComponentProps<T>_, donde _T_ es la definición del objeto que pasamos como parametro - en nuestro caso no pasamos ningún parametro:
+
+```js
+type TParams = {  };
+const Protected: FunctionComponent<RouteComponentProps<TParams>> = function (props: RouteComponentProps<TParams>) {
+```
+
+En _Profile.tsx_ demostramos el uso de los componentes visuales, en este caso, de _<AmplifySignOut />_:
+
+```js
+<Container>
+    <h1>Profile</h1>
+    <h2>Username: {user.username}</h2>
+    <h3>Email: {user.email}</h3>
+    <h4>Phone: {user.phone_number}</h4>
+    <AmplifySignOut />
+</Container>
+```
