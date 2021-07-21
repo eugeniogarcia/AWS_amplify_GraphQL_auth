@@ -14,6 +14,8 @@ import CSS from 'csstype';
 
 import { Auth } from 'aws-amplify'
 
+import preotectedRoute from './protectedRoute'
+
 //En styles definimos varios elementos, todos ellos contendran uno o varios estilos, por eso los definimos como CSS.Properties
 const styles = {
   container: { padding: '20', margin: '0' } as CSS.Properties,
@@ -92,12 +94,15 @@ const Monedas: FunctionComponent<RouteComponentProps<TParams>> = function (props
   const [state, dispatch] = useReducer(reducer, initialState)
 
   //Protege el acceso
+  //Usamos el custom hook
+  /*
   useEffect(() => {
     Auth.currentAuthenticatedUser()
       .catch(() => {
         props.history.push('/profile')
       })
   }, [])
+  */
 
   //Una vez se ha creado el virtual DOM
   useEffect(() => {
@@ -226,4 +231,6 @@ const Monedas: FunctionComponent<RouteComponentProps<TParams>> = function (props
   );
 }
 
-export default Monedas;
+//Protegemos el recurso usando el custom hook
+//export default Monedas;
+export default preotectedRoute(Monedas,'/profile');

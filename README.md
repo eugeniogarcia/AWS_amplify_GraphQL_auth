@@ -458,3 +458,44 @@ En _Profile.tsx_ demostramos el uso de los componentes visuales, en este caso, d
     <AmplifySignOut />
 </Container>
 ```
+
+Para que este componente funcione, debemos crear un __wrapper alrededor de nuestro componente__:
+
+```js
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
+
+....
+
+export default withAuthenticator(Profile)
+```
+
+## Custom Hook
+
+Vamos a crear un customHook para proteger los componentes, y evitar así tener que repetir "tanto código":
+
+```js
+const protectedRoute = (Comp: FunctionComponent<RouteComponentProps<TParams>>, route = '/profile') => (props:RouteComponentProps<TParams>) => {
+    async function checkAuthState() {
+        try {
+            await Auth.currentAuthenticatedUser()
+        } catch (err) {
+            props.history.push(route)
+        }
+    }
+
+    useEffect(() => {
+        checkAuthState()
+    }, [])
+    return <Comp {...props} />
+}
+
+export default protectedRoute
+```
+
+Es bastante auto-explicativo. Si acaso destacar los tipos Typescript que hemos utilizado.
+
+Con este customHook, podemos proteger un componente como _Monedas.tsx_ facilmente:
+
+```js
+export default preotectedRoute(Monedas,'/profile');
+```
