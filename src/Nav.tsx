@@ -27,9 +27,14 @@ const Nav: FunctionComponent<propiedades> = (props: propiedades) => {
                         <FileProtectOutlined />Protected
                     </Link>
                 </Menu.Item>
-                <Menu.Item key='monedsa'>
+                <Menu.Item key='monedas'>
                     <Link to='/monedas'>
                         <FileProtectOutlined />Monedas
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key='newprofile'>
+                    <Link to='/newprofile'>
+                        <ProfileOutlined />New Profile
                     </Link>
                 </Menu.Item>
             </Menu>

@@ -12,8 +12,7 @@ import 'antd/dist/antd.css'
 import { uuid } from 'uuidv4';
 import CSS from 'csstype';
 
-import { Auth } from 'aws-amplify'
-
+//Custom hook
 import preotectedRoute from './protectedRoute'
 
 //En styles definimos varios elementos, todos ellos contendran uno o varios estilos, por eso los definimos como CSS.Properties
@@ -233,4 +232,4 @@ const Monedas: FunctionComponent<RouteComponentProps<TParams>> = function (props
 
 //Protegemos el recurso usando el custom hook
 //export default Monedas;
-export default preotectedRoute(Monedas,'/profile');
+export default preotectedRoute(Monedas,'/newprofile');

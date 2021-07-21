@@ -6,6 +6,7 @@ import Public from './Public'
 import Profile from './Profile'
 import Protected from './Protected'
 import Monedas from './Monedas'
+import NewProfile from './NewProfile'
 
 const Router: FunctionComponent = () => {
     const [current, setCurrent] = useState('home')
@@ -30,6 +31,7 @@ const Router: FunctionComponent = () => {
                 <Route exact path="/protected" component={Protected} />
                 <Route exact path="/profile" component={Profile} />
                 <Route exact path="/monedas" component={Monedas} />
+                <Route exact path="/newprofile" component={NewProfile} />
                 <Route component={Public} />
             </Switch>
         </HashRouter>
