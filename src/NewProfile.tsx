@@ -45,7 +45,7 @@ function Profile() {
             .catch(err => console.log('error signing out: ', err))
     }
 
-    if (user) {
+    if (user.username.length>0) {
         return (
             <Container>
                 <h1>Profile</h1>

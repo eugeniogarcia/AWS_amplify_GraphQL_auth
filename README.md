@@ -499,3 +499,6 @@ Con este customHook, podemos proteger un componente como _Monedas.tsx_ facilment
 ```js
 export default preotectedRoute(Monedas,'/profile');
 ```
+
+## Custom Form
+

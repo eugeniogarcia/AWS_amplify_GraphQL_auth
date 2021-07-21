@@ -1,8 +1,8 @@
 import React from 'react'
 import Button from './Button'
-import { styles, ForgotPasswordSubmit } from './Form'
+import { styles, propiedadesForgotPasswordSubmit } from './Form'
 
-function ForgotPasswordSubmit(props: ForgotPasswordSubmit) {
+function ForgotPasswordSubmit(props: propiedadesForgotPasswordSubmit) {
     return (
         <div style={styles.container}>
             <input

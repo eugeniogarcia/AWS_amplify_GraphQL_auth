@@ -34,7 +34,7 @@ export type propiedadesForgotPassword = {
     forgotPassword: () => void,
 }
 
-export type ForgotPasswordSubmit = {
+export type propiedadesForgotPasswordSubmit = {
     updateFormState: (x: React.ChangeEvent<HTMLInputElement>) => any,
     forgotPasswordSubmit: () => void,
 }

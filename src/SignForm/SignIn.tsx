@@ -2,7 +2,7 @@ import React from 'react'
 import Button from './Button'
 import { styles, propiedadesSingIn } from './Form'
 
-function SignIn({ signIn, updateFormState }: propiedadesSingin) {
+function SignIn({ signIn, updateFormState }: propiedadesSingIn) {
     return (
         <div style={styles.container}>
             <input
